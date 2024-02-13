@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 const userRouter = require('./src/routes/userRouter');
+const stockRouter = require('./src/routes/StockRoute');
 
 // Connect to MongoDB
 const uri =
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userRouter);
+app.use('/stock',stockRouter)
 
 // Create HTTP server and listen on port 3000
 const server = http.createServer(app);

@@ -21,3 +21,5 @@ async function run() {
 }
 run().catch(console.dir);
 
+
+host: https://inv-mgnt-server.onrender.com

@@ -34,7 +34,7 @@ const userController = {
       
 
         await newUser.save();
-        res.status(201).json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'User created successfully',data:newUser });
 
     } catch (error) {
         console.error("Error creating user:", error);
@@ -61,7 +61,7 @@ const userController = {
             return res.status(401).json({ message: 'Invalid password' });
 
         }
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: 'Login successful' ,data:user});
 
 
     }
@@ -75,6 +75,7 @@ const userController = {
   getAllUser:async (req,res)=>{
     try{
       const users = await user_model.find()
+      res
     }
     catch(err){
       console.error('Error logging in:', err);
