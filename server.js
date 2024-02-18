@@ -10,9 +10,11 @@ const uri =
 mongoose.connect(uri);
 
 const app = express();
+const cors = require('cors');
 
 // Middleware: Ensure correct `express.json()` import
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 // Your route for the root URL
 app.get('/', (req, res) => {
