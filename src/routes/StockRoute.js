@@ -7,5 +7,6 @@ stockRouter.post('/addstock',stockController.addStock)
 
 stockRouter.get('/stock/:id',stockController.getSingleStock)
 stockRouter.get('/stock',stockController.getAllStock)
+stockRouter.patch('/stock/:id',stockController.editStock)
 
 module.exports = stockRouter
