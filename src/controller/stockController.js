@@ -142,6 +142,26 @@ const stockController = {
         console.error("Error editing stock:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
+},
+
+deleteStock:  async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Check if the stock entry exists
+        const existingStock = await stock_module.findById(id);
+        if (!existingStock) {
+            return res.status(404).json({ error: "Stock not found" });
+        }
+
+        // Delete the stock entry
+        await stock_module.findByIdAndDelete(id);
+
+        return res.status(200).json({ message: "Stock deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting stock:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 }
 
 };
