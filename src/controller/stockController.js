@@ -62,6 +62,44 @@ const stockController = {
 },
 
 
+addSingleStock: async (req,res)=>{
+    try {
+        const { user, stockName, qty, price, desc } = req?.body;
+
+            const userExists = await user_model.findById(user);
+
+            if(!userExists){
+                return res.status(404).json({ error: "user not found" });
+
+            }
+
+            const stock_id = generateUserId();
+
+            // Create new stock entry
+            const newStock = new stock_module({
+                user: user,
+                stockName,
+                qty,
+                price,
+                desc,
+                stockId: stock_id,
+            });
+
+            // Save new stock entry
+            await newStock.save();
+            res.status(201).json({ message: "Stocks created successfully", data: newStock });
+
+
+
+    }
+    catch(error){
+        console.error("Error creating stocks:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+
+},
+
+
   getSingleStock: async (req, res) => {
     try {
       const { id } = req.params;

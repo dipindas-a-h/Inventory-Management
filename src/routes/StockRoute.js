@@ -4,6 +4,7 @@ const stockController = require('../controller/stockController')
 const stockRouter = express.Router()
 
 stockRouter.post('/addstock',stockController.addStock)
+stockRouter.post('/addstocksingle',stockController.addSingleStock)
 
 stockRouter.get('/stock/:id',stockController.getSingleStock)
 stockRouter.get('/stock',stockController.getAllStock)
