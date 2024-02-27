@@ -11,6 +11,7 @@ mongoose.connect(uri);
 
 const app = express();
 const cors = require('cors');
+const saleOrderRouter = require('./src/routes/saleOrderRoute');
 
 // Middleware: Ensure correct `express.json()` import
 app.use(express.json());
@@ -23,6 +24,7 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/stock',stockRouter)
+app.use('/sale', saleOrderRouter);
 
 // Create HTTP server and listen on port 3000
 const server = http.createServer(app);
