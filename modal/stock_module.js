@@ -29,6 +29,10 @@ const StockSchema = new  mongoose.Schema({
         ref:user_model,
         
     }
+    ,created_date: {
+        type: Date,
+        default: Date.now
+      }
 
 })
 

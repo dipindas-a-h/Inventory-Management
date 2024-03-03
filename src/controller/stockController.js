@@ -200,6 +200,22 @@ deleteStock:  async (req, res) => {
         console.error("Error deleting stock:", error);
         return res.status(500).json({ message: "Internal server error" });
     }
+},
+
+
+stockNotification : async (req,res)=>{
+    try{
+        console.log('callget=================================');
+        const limit  = parseInt(10)
+        const lowStocks = await stock_module.find({ qty: { $lt: limit } });
+
+        return res.status(200).json({ message: "notifiaction" ,data:lowStocks});
+
+    }catch(err){
+        console.error("Error deleting stock:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+
 }
 
 };
