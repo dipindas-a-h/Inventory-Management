@@ -37,14 +37,46 @@ const SaleOrderController = {
       );
 
       res.status(201).json({ saleOrder, insertedDetails });
-
-     
     } catch (err) {
       console.error("Error creating sale order:", err);
       res.status(500).json({ message: "Internal server error" });
     }
   },
 
+  editSaleOrder: async (req, res) => {
+    try {
+      const { id } = req?.params;
+      const { saleOrderData, saleOrderDetailsData } = req?.body;
+      const saleOrder = await SaleOrder.findByIdAndUpdate(id,saleOrderData);
+      const detailDocuments = [];
+      const updatedDetails = [];
+console.log('saleorder data',saleOrderDetailsData,saleOrderData);
+      for (const detail of saleOrderDetailsData) {
+        // Assign the sale order id to each detail
+        detail.saleorder_id = saleOrder._id;
+        const detailDocument = new SaleOrderDetails(detail);
+        detailDocuments.push(detailDocument);
+
+        let a = await stock_module.findById(detail.stock_id);
+        let qty = detail.quantity;
+
+        // console.log("aa", qty,a?.qty,detail.quantity);
+
+        await stock_module.findByIdAndUpdate(detail.stock_id, { qty: qty });
+
+        const updatedDetail = await SaleOrderDetails.findByIdAndUpdate(detail._id, detail, { new: true });
+        updatedDetails.push(updatedDetail);
+      }
+      // const insertedDetails = await SaleOrderDetails.insertMany(
+      //   detailDocuments
+      // );
+
+      res.status(201).json({ saleOrder, updatedDetails });
+    } catch (err) {
+      console.error("Error creating sale order:", err);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
 
   getAllSaleOrdersWithDetails: async (req, res) => {
     try {
@@ -52,10 +84,14 @@ const SaleOrderController = {
       const saleOrders = await SaleOrder.find();
 
       // Populate details for each sale order
-      const populatedSaleOrders = await Promise.all(saleOrders.map(async (order) => {
-        const details = await SaleOrderDetails.find({ saleorder_id: order._id });
-        return { ...order.toObject(), details };
-      }));
+      const populatedSaleOrders = await Promise.all(
+        saleOrders.map(async (order) => {
+          const details = await SaleOrderDetails.find({
+            saleorder_id: order._id,
+          });
+          return { ...order.toObject(), details };
+        })
+      );
 
       res.status(200).json(populatedSaleOrders);
     } catch (err) {
@@ -76,7 +112,9 @@ const SaleOrderController = {
       }
 
       // Populate details for the sale order
-      const details = await SaleOrderDetails.find({ saleorder_id: saleOrder._id });
+      const details = await SaleOrderDetails.find({
+        saleorder_id: saleOrder._id,
+      });
 
       // Combine sale order with its details
       const saleOrderWithDetails = { ...saleOrder.toObject(), details };
@@ -86,8 +124,7 @@ const SaleOrderController = {
       console.error("Error fetching sale order:", err);
       res.status(500).json({ message: "Internal server error" });
     }
-  }
-
+  },
 };
 
 module.exports = SaleOrderController;
