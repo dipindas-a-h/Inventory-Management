@@ -25,6 +25,9 @@ app.get('/', (req, res) => {
 app.use('/user', userRouter);
 app.use('/stock',stockRouter)
 app.use('/sale', saleOrderRouter);
+app.get('/test',(req,res)=>{console.log('hiii');
+res?.send('test');
+})
 
 // Create HTTP server and listen on port 3000
 const server = http.createServer(app);
