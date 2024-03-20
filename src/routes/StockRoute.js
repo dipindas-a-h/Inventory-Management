@@ -10,6 +10,7 @@ stockRouter.get('/stock/:id',stockController.getSingleStock)
 stockRouter.get('/stock',stockController.getAllStock)
 stockRouter.patch('/stock/:id',stockController.editStock)
 stockRouter.delete('/stock/:id',stockController.deleteStock)
+
 stockRouter.get('/nstock/notification',stockController.stockNotification)
 
 module.exports = stockRouter
