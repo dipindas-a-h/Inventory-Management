@@ -47,10 +47,10 @@ const SaleOrderController = {
     try {
       const { id } = req?.params;
       const { saleOrderData, saleOrderDetailsData } = req?.body;
-      const saleOrder = await SaleOrder.findByIdAndUpdate(id,saleOrderData);
+      const saleOrder = await SaleOrder.findByIdAndUpdate(id, saleOrderData);
       const detailDocuments = [];
       const updatedDetails = [];
-console.log('saleorder data',saleOrderDetailsData,saleOrderData);
+      console.log("saleorder data", saleOrderDetailsData, saleOrderData);
       for (const detail of saleOrderDetailsData) {
         // Assign the sale order id to each detail
         detail.saleorder_id = saleOrder._id;
@@ -58,13 +58,24 @@ console.log('saleorder data',saleOrderDetailsData,saleOrderData);
         detailDocuments.push(detailDocument);
 
         let a = await stock_module.findById(detail.stock_id);
-        let qty = detail.quantity;
+        let qty = 0;
 
+
+        if(saleOrderDetailsData?.difference<0){
+qty = parseInt(a?.qty) + parseInt(saleOrderDetailsData?.difference ? saleOrderDetailsData?.difference : 0)
+        }else{
+          qty = parseInt(a?.qty) - parseInt(saleOrderDetailsData?.difference ? saleOrderDetailsData?.difference : 0)
+
+        }
         // console.log("aa", qty,a?.qty,detail.quantity);
 
         await stock_module.findByIdAndUpdate(detail.stock_id, { qty: qty });
 
-        const updatedDetail = await SaleOrderDetails.findByIdAndUpdate(detail._id, detail, { new: true });
+        const updatedDetail = await SaleOrderDetails.findByIdAndUpdate(
+          detail._id,
+          detail,
+          { new: true }
+        );
         updatedDetails.push(updatedDetail);
       }
       // const insertedDetails = await SaleOrderDetails.insertMany(
